@@ -9,7 +9,6 @@ Users = {}
 
 
 PhiNet = ConvNet()
-#Phinet = torch.load("/home/tug/WS/PhiNet/models/phinet_siamese_theone.stdt")['net']
 
 
 @app.route('/Welcome')
@@ -49,7 +48,7 @@ def check():
 
 
 if __name__ == '__main__':
-    PhiNet = torch.load("models/phinet_siamese_theone.stdt")['net'].cpu()
+    PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net'].cpu()
     print("* Model has been imported....")
     print("* PhiNet is running....")
     app.run(host="192.168.1.8", port="5000")
