@@ -9,9 +9,6 @@ api = Api(app)
 Users = {}
 
 
-PhiNet = ConvNet()
-
-
 @app.route('/Welcome')
 def Welcome():
     return render_template('Welcome.html')
@@ -21,7 +18,6 @@ def Welcome():
 def authenticate():
 
     user = request.form['UserId']
-    # user = 0
     if user in Users:
         image = request.files['Signature']
         return jsonify("Score: "+str('{:0.3f}'.format(F.pairwise_distance(PhiNet(PreProcess(image)), Users[user]).item())))
@@ -51,7 +47,7 @@ def check():
 if __name__ == '__main__':
     os.system("clear")
     host = os.popen("hostname -I").read().split(" ")[0]
-    PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net'].cpu()
+    PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net']
     print(" * Model has been imported....")
     print(" * PhiNet is running....")
-    app.run(host=host, port="5000")
+    app.run(host="192.168.1.8", port="69")
