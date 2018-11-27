@@ -3,13 +3,13 @@ from flask_restful import Resource, Api
 from flask import render_template
 from werkzeug.utils import secure_filename
 from models.PhiNet import *
+import os
 app = Flask(__name__)
 api = Api(app)
 Users = {}
 
 
 PhiNet = ConvNet()
-#Phinet = torch.load("/home/tug/WS/PhiNet/models/phinet_siamese_theone.stdt")['net']
 
 
 @app.route('/Welcome')
@@ -49,7 +49,9 @@ def check():
 
 
 if __name__ == '__main__':
-    PhiNet = torch.load("models/phinet_siamese_theone.stdt")['net'].cpu()
-    print("* Model has been imported....")
-    print("* PhiNet is running....")
-    app.run(host="192.168.1.8", port="5000")
+    os.system("clear")
+    host = os.popen("hostname -I").read().split(" ")[0]
+    PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net'].cpu()
+    print(" * Model has been imported....")
+    print(" * PhiNet is running....")
+    app.run(host=host, port="5000")
