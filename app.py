@@ -1,0 +1,55 @@
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api
+from flask import render_template
+from werkzeug.utils import secure_filename
+from models.PhiNet import *
+app = Flask(__name__)
+api = Api(app)
+Users = {}
+
+
+PhiNet = ConvNet()
+#Phinet = torch.load("/home/tug/WS/PhiNet/models/phinet_siamese_theone.stdt")['net']
+
+
+@app.route('/Welcome')
+def Welcome():
+    return render_template('Welcome.html')
+
+
+@app.route('/authenticate', methods=['POST'])
+def authenticate():
+
+    user = request.form['UserId']
+    # user = 0
+    if user in Users:
+        image = request.files['Signature']
+        return jsonify("Score: "+str('{:0.3f}'.format(F.pairwise_distance(PhiNet(PreProcess(image)), Users[user]).item())))
+
+    else:
+        return jsonify("User isn't present!")
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    user = request.form['UserId']
+    image = request.files['Signature']
+
+    if user in Users:
+        return jsonify("User is already registered!")
+
+    Users[user] = PhiNet(PreProcess(image)).data
+    # image.save('/home/tug/WS/PhiNet/db/'+image.filename)
+    return jsonify("User: "+str(user)+" has been successfully registered")
+
+
+@app.route('/check', methods=['GET'])
+def check():
+    return jsonify({i: user for i, user in enumerate(Users)})
+
+
+if __name__ == '__main__':
+    PhiNet = torch.load("models/phinet_siamese_theone.stdt")['net'].cpu()
+    print("* Model has been imported....")
+    print("* PhiNet is running....")
+    app.run(host="192.168.1.8", port="5000")
