@@ -50,4 +50,4 @@ if __name__ == '__main__':
     PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net']
     print(" * Model has been imported....")
     print(" * PhiNet is running....")
-    app.run(host="192.168.1.8", port="69")
+    app.run(host=host, port="5000")
