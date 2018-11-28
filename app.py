@@ -45,9 +45,9 @@ def check():
 
 
 if __name__ == '__main__':
-    os.system("clear")
     host = os.popen("hostname -I").read().split(" ")[0]
     PhiNet = torch.load("models/phinet_siamese_theone.stdt", map_location="cpu")['net']
+    os.system("clear")
     print(" * Model has been imported....")
     print(" * PhiNet is running....")
     app.run(host=host, port="5000")
