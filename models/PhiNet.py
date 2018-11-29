@@ -18,6 +18,11 @@ def PreProcess(image):
     return torch.from_numpy(img.copy()).float()
 
 
+def EC_dist(x1, x2):
+    print(x1.shape, x2.shape)
+    return torch.sum(torch.pow(F.pairwise_distance(x1, x2), 2))
+
+
 class ConvNet(nn.Module):
     def __init__(self, ):
         super(ConvNet, self).__init__()
@@ -60,13 +65,13 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
         out = self.layer1(x)
-        #print (out.size())
+        # print (out.size())
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
         out = self.layer5(out)
         out = self.adap(out)
-        #print (out.size())
+        # print (out.size())
         out = out.reshape(out.size()[0], -1)
 
         out = self.layer6(out)

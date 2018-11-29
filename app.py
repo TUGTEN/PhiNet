@@ -20,7 +20,7 @@ def authenticate():
     user = request.form['UserId']
     if user in Users:
         image = request.files['Signature']
-        return jsonify("Score: "+str('{:0.3f}'.format(F.pairwise_distance(PhiNet(PreProcess(image)), Users[user]).item())))
+        return jsonify("Score: "+str('{:0.3f}'.format(EC_dist(PhiNet(PreProcess(image)), Users[user]).item())))
 
     else:
         return jsonify("User isn't present!")
