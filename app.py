@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_restful import Resource, Api
 from flask import render_template
-from werkzeug.utils import secure_filename
 from models.PhiNet import *
 import os
 app = Flask(__name__)
