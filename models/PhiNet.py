@@ -3,23 +3,44 @@ import cv2
 import numpy as np
 from torch import nn
 import torch.nn.functional as F
-
+from PIL import Image, ImageOps
 resize_shape = [128, 256]
+from torchvision import transforms
+from matplotlib import pyplot as plt
+
+ToGray = transforms.Grayscale()
+T = transforms.ToTensor()
 
 
 def PreProcess(image):
+    '''
     nparr = np.fromstring(image.read(), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
-
+    print(img)
     img = cv2.resize(img, (resize_shape[0], resize_shape[1]))
+    print(img)
     img.astype(np.float64)
+    print(img)
     img = np.transpose(img[np.newaxis, np.newaxis, :, :], (0, 1, 3, 2))
+    print(img)
+    print((torch.from_numpy(img.copy()).float())/255.00)
+    return (torch.from_numpy(img.copy()).float())/255.00
 
-    return torch.from_numpy(img.copy()).float()
+
+'''
+    image.save(image.filename)
+    img = ToGray(Image.open(image.filename))
+    #img = ImageOps.invert(img)
+    #plt.imshow(T(img)[0, :, :])
+    # img.show()
+    # plt.waitforbuttonpress()
+    # plt.show()
+    # print(T(img))
+    return T(img.resize(resize_shape))[np.newaxis, :, :, :]
 
 
 def EC_dist(x1, x2):
-    print(x1.shape, x2.shape)
+    #print(x1.shape, x2.shape)
     return torch.sum(torch.pow(F.pairwise_distance(x1, x2), 2))
 
 
@@ -63,6 +84,8 @@ class ConvNet(nn.Module):
             nn.Linear(512, 128),
             nn.ReLU())
 
+        self.sigmoid = nn.Sigmoid()
+
     def forward(self, x):
         out = self.layer1(x)
         # print (out.size())
@@ -77,5 +100,5 @@ class ConvNet(nn.Module):
         out = self.layer6(out)
 
         out = self.layer7(out)
-
+        out = self.sigmoid(out)
         return out
