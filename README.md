@@ -1,5 +1,5 @@
 # PhiNet
-A PyTorch-based implementation of Siamese-Neural Net for Signature verification
+A PyTorch-based implementation of Siamese-Neural Net for Signature verification served using REST APIs
 
 ## The Project consists of :
 
