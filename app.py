@@ -36,7 +36,7 @@ def register():
 
     Users[user] = PhiNet(PreProcess(image)).data
 
-    # image.save('/home/tug/WS/PhiNet/db/'+image.filename)
+
     print("User: "+str(user)+" has been successfully registered")
     return jsonify("User: "+str(user)+" has been successfully registered")
 
@@ -51,9 +51,7 @@ if __name__ == '__main__':
     host = os.popen("hostname -I").read().split(" ")[0]
     PhiNet = ConvNet()
     PhiNet.load_state_dict(torch.load("models/phinet_siamese_theone_dict (3).stdt", map_location="cpu"))
-    # PhiNet.eval()
-    #PhiNet = torch.load("models/phinet_siamese_theone (3).stdt", map_location="cpu")["net"]
-    #torch.save(PhiNet.state_dict(), "models/phinet_siamese_theone_dict (3).stdt")
+
     PhiNet.eval()
     os.system("clear")
     print(" * Model has been imported....")
